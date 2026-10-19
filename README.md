@@ -15,11 +15,11 @@ data/raw/responses.csv  ->  extract -> transform -> validate -> load
 
 | Step | File | What it does |
 |------|------|--------------|
-| Extract | `src/climbing/extract.py` | Reads the raw Forms export unchanged |
-| Transform | `src/climbing/transform.py` | Short column names, collapses the one-column-per-option grids (age, climbing experience) into single ordered columns, Likert text to 1-5, yes/no to boolean, builds a `social_score` composite |
+| Extract | Reads the raw Forms export unchanged |
+| Transform | Short column names, collapses the one-column-per-option grids (age, climbing experience) into single ordered columns, Likert text to 1-5, yes/no to boolean, builds a `social_score` composite |
 | Normalize | `build_traits_table()` | Splits the checkbox answers into a `respondent_traits` table (one row per respondent per trait) |
-| Validate | `src/climbing/validate.py` | Range, uniqueness, and referential-integrity checks |
-| Load | `src/climbing/load.py` | Writes CSV, Parquet, and a SQLite database (`respondents`, `respondent_traits`) |
+| Validate | Range, uniqueness, and referential-integrity checks |
+| Load | Writes CSV, Parquet, and a SQLite database (`respondents`, `respondent_traits`) |
 
 ## Run it
 
