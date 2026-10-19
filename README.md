@@ -23,14 +23,6 @@ All pipeline steps live in `cleaningAnswerScript.py`:
 | Validate | `validate()` | Range, uniqueness, and referential-integrity checks |
 | Load | `load()` | Writes CSV and a SQLite database (`respondents`, `respondent_traits`), plus Parquet if `pyarrow` is installed |
 
-Other files:
-
-| File | Purpose |
-|------|---------|
-| `analyze.py` | Statistical tests behind the findings |
-| `explore.py` | Quick SQL queries against the database |
-| `test_transform.py` | Tests for the cleaning steps |
-| `findings.txt` | Output of the analysis |
 
 ## Run it
 
