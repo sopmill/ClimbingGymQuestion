@@ -1,0 +1,25 @@
+1. 232/277 respondents (83.8%, 95% CI 79.0%-87.6%) call their gym a third place.
+
+2. Social score (mean of the 6 agreement items, 1-5): third place = 4.08, not = 3.04; Mann-Whitney p = 5.7e-15, rank-biserial r = 0.74.
+   Caution: the agreement items overlap with the idea of a third place, so this partly measures the same thing twice.
+
+3. Chi-square tests of third-place answer vs. each background variable:
+   age_band             p = 0.438, Cramer's V = 0.12  (20% of cells have expected count < 5)
+   climbing_experience  p = 0.562, Cramer's V = 0.10  (0% of cells have expected count < 5)
+   travel_time          p = 0.213, Cramer's V = 0.15  (20% of cells have expected count < 5)
+
+4. Time at the gym vs. social score (Spearman):
+   visits_per_week      rho = 0.24, p = 6.4e-05
+   hours_per_visit      rho = 0.24, p = 6.3e-05
+   gym_hours_per_week   rho = 0.33, p = 1.8e-08
+   Weekly gym hours, third place vs not: median 6.0 vs 4.0 (p = 2.2e-06)
+
+5. Share calling the gym a third place, among people who ticked each statement:
+   95.5% (n=132)  I spend time there beyond the time needed to climb
+   94.3% (n=194)  I have developed relationships with people I would not otherwise have met
+   93.5% (n=200)  I have met new friends there
+   93.2% (n=191)  I have found people with similar interest
+   92.4% (n=105)  I participate in group events or activites
+   92.0% (n=212)  I feel welcomed by the community
+   87.5% (n=255)  I regularly see familiar faces
+   61.7% (n= 94)  I primarily visit to exercise and leave afterward
