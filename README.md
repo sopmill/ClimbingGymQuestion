@@ -1,34 +1,44 @@
 # Are Climbing Gyms Third Places?
 
-An end-to-end data project built on a Google Forms survey of 277 climbers collected from posting the Form on Facebook climbing groups and Reddit climbing boards.
-A *third place* is a social space that is neither home (first place) nor work (second place). This project cleans the raw survey export into a tested pipeline, stores it in a small relational database, and analyzes why a climber may refer to their gym as their third place.
+An end-to-end data project built on a Google Forms survey of 277 climbers, collected by posting the form in Facebook climbing groups and on Reddit climbing boards.
+A *third place* is a social space that is neither home (first place) nor work (second place). This project cleans the raw survey export into a pipeline, stores it in a small relational database, and analyzes why a climber may refer to their gym as their third place.
 
 ## Pipeline
 
 ```
 data/raw/responses.csv  ->  extract -> transform -> validate -> load
                                                      |
-                data/processed/{responses_clean.csv, .parquet, survey.db}
+                data/processed/{responses_clean.csv, survey.db}
                                                      |
-                                      analysis/analyze.py -> reports/
+                                           analyze.py -> findings.txt
 ```
 
-| Step | File | What it does |
-|------|------|--------------|
-| Extract | Reads the raw Forms export unchanged |
-| Transform | Short column names, collapses the one-column-per-option grids (age, climbing experience) into single ordered columns, Likert text to 1-5, yes/no to boolean, builds a `social_score` composite |
+All pipeline steps live in `cleaningAnswerScript.py`:
+
+| Step | Function | What it does |
+|------|----------|--------------|
+| Extract | `extract()` | Reads the raw Forms export unchanged |
+| Transform | `transform()` | Short column names, collapses the one-column-per-option grids (age, climbing experience) into single ordered columns, Likert text to 1-5, yes/no to boolean, builds a `social_score` composite |
 | Normalize | `build_traits_table()` | Splits the checkbox answers into a `respondent_traits` table (one row per respondent per trait) |
-| Validate | Range, uniqueness, and referential-integrity checks |
-| Load | Writes CSV, Parquet, and a SQLite database (`respondents`, `respondent_traits`) |
+| Validate | `validate()` | Range, uniqueness, and referential-integrity checks |
+| Load | `load()` | Writes CSV and a SQLite database (`respondents`, `respondent_traits`), plus Parquet if `pyarrow` is installed |
+
+Other files:
+
+| File | Purpose |
+|------|---------|
+| `analyze.py` | Statistical tests behind the findings |
+| `explore.py` | Quick SQL queries against the database |
+| `test_transform.py` | Tests for the cleaning steps |
+| `findings.txt` | Output of the analysis |
 
 ## Run it
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install pandas pyarrow scipy matplotlib pytest
 # put the survey CSV at data/raw/responses.csv
-python run_pipeline.py
-python analysis/analyze.py
-python -m pytest
+python cleaningAnswerScript.py
+python analyze.py
 ```
 
 ## Data model
@@ -36,17 +46,9 @@ python -m pytest
 - `respondents`: one row per person (`respondent_id`, `age_group`, `climbing_experience`, `travel_time`, `visits_per_week`, `hours_per_visit`, six `likert_*` columns, `social_score`, `is_third_place`, `story`)
 - `respondent_traits`: `respondent_id`, `trait` (many per respondent)
 
-Example query:
-
-```sql
-SELECT t.trait, COUNT(*) AS n, ROUND(AVG(r.is_third_place) * 100, 1) AS pct_third_place
-FROM respondent_traits t JOIN respondents r USING (respondent_id)
-GROUP BY t.trait ORDER BY pct_third_place DESC;
-```
-
 ## Findings (n = 277)
 
-See `reports/findings.txt` and `reports/figures/`. In brief:
+Full output is in `findings.txt`. In brief:
 
 - About 84% of respondents call their gym a third place.
 - Those who do score much higher on the social items (about 4.1 vs 3.0 out of 5), but those items overlap with the third-place idea, so this is partly circular.
@@ -56,8 +58,7 @@ See `reports/findings.txt` and `reports/figures/`. In brief:
 
 ## Limitations
 
-- Convenience sample: people who chose to answer a climbing survey are probably more engaged with the community than the average climber.
+- Self-selected sample: respondents came from online climbing communities on Facebook and Reddit, so they are probably more engaged with climbing and gym culture than the average climber.
 - Cross-sectional and self-reported, so none of the above shows causation.
 - Small subgroups (60+, over an hour of travel) leave the tests with little power.
 - Several tests were run without multiple-comparison correction; treat borderline results cautiously.
-
