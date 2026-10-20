@@ -7,8 +7,9 @@ from pathlib import Path
 
 import pandas as pd
 
-RAW = Path("/Users/smiller04/Desktop/ClimbingGymData/data/raw/responses.csv")
-OUT = Path("/Users/smiller04/Desktop/ClimbingGymData/data/processed")
+BASE = Path(__file__).resolve().parent
+RAW = BASE / "data" / "raw" / "responses.csv"
+OUT = BASE / "data" / "processed"
 
 
 #ordering data properly
